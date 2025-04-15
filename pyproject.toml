@@ -1,0 +1,21 @@
+[project]
+name = "lazy-settings"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "anyio>=4.9.0",
+    "django>=5.2",
+    "mypy>=1.15.0",
+    "pre-commit>=4.2.0",
+    "pytest>=8.3.5",
+    "pytest-env>=1.1.5",
+    "pytest-mock>=3.14.0",
+    "ruff>=0.11.5",
+    "trio>=0.29.0",
+]
+
