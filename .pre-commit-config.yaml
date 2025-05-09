@@ -10,3 +10,8 @@ repos:
     rev: v1.15.0
     hooks:
     - id: mypy
+      entry: mypy .
+      args: ["--exclude", "tests/"]
+      additional_dependencies: ["django-stubs", "pytest"]
+
+      pass_filenames: false
