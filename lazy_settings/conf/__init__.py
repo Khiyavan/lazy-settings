@@ -121,12 +121,12 @@ class LazySettings(LazyObject["Settings | UserSettingsHolder"]):
     def register(self, settings_module: ModuleType) -> None:
         if self._wrapped is empty:
             self._setup()
-        self._wrapped.register(settings_module)
+        self._wrapped.register(settings_module)  # type: ignore[attr-defined]
 
     def clear(self) -> None:
         if self._wrapped is empty:
             return
-        self._wrapped.clear()
+        self._wrapped.clear()  # type: ignore[attr-defined]
 
 
 class Settings:
@@ -188,7 +188,7 @@ class UserSettingsHolder:
         if not name.isupper() or name in self._deleted:
             raise AttributeError
 
-        return super().__getattr__(name)
+        return getattr(self, name)
 
     def __setattr__(self, name: str, value: Any) -> None:
         self._deleted.discard(name)
