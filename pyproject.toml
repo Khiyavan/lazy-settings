@@ -5,9 +5,26 @@ build-backend = "hatchling.build"
 [project]
 name = "lazy-settings"
 version = "0.1.0"
-description = "Add your description here"
+description = "settings manaager for pyhton"
 readme = "README.md"
 requires-python = ">=3.11"
+maintainers = [
+    {name = "amirreza",email = "amir.rsf1380@gmail.com"},
+]
+classifiers = [
+    "Programming Language :: Python",
+    "Environment :: Web Environment",
+    "Development Status :: 4 - Beta" ,
+    "Topic :: Utilities",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Libraries",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
 dependencies = []
 
 [dependency-groups]
