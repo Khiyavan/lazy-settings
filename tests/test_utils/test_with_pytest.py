@@ -11,6 +11,80 @@ settings.clear()
 settings.register(global_settings)
 
 
+@pytest.mark.order(1)
+@override_settings(A_SETTING="something new")
+def test_override_settings_function_decorator():
+    assert settings.A_SETTING == "something new"
+
+
+@pytest.mark.order(2)
+def test_override_settings_function_decorator_cleanup():
+    assert settings.A_SETTING == "something"
+
+
+@pytest.mark.order(3)
+@override_settings(A_SETTING="something new")
+async def test_override_settings_async_function_decorator():
+    assert settings.A_SETTING == "something new"
+
+
+@pytest.mark.order(4)
+async def test_override_settings_async_function_decorator_cleanup():
+    assert settings.A_SETTING == "something"
+
+
+def test_override_settings_context_manager_in_function():
+    with override_settings(A_SETTING="context!!"):
+        assert settings.A_SETTING == "context!!"
+
+    assert settings.A_SETTING == "something"
+
+
+async def test_override_settings_context_manager_in_async_function():
+    with override_settings(A_SETTING="context!!"):
+        assert settings.A_SETTING == "context!!"
+
+    assert settings.A_SETTING == "something"
+
+
+@pytest.mark.order(5)
+@modify_settings(LIST_BASED_SETTING={"append": "things", "prepend": "first things"})
+def test_modify_settings_fucntion_decorator():
+    assert settings.LIST_BASED_SETTING == ["first things", "one", "two", "things"]
+
+
+@pytest.mark.order(6)
+def test_modify_settings_function_decorator_cleanup():
+    assert settings.LIST_BASED_SETTING == ["one", "two"]
+
+
+@pytest.mark.order(7)
+@modify_settings(LIST_BASED_SETTING={"append": "things", "prepend": "first things"})
+async def test_modify_settings_async_fucntion_decorator():
+    assert settings.LIST_BASED_SETTING == ["first things", "one", "two", "things"]
+
+
+@pytest.mark.order(8)
+async def test_modify_settings_async_function_decorator_cleanup():
+    assert settings.LIST_BASED_SETTING == ["one", "two"]
+
+
+def test_modify_settings_context_manager_in_function():
+    with modify_settings(
+        LIST_BASED_SETTING={"append": "three", "prepend": "zero"},
+    ):
+        assert settings.LIST_BASED_SETTING == ["zero", "one", "two", "three"]
+    assert settings.LIST_BASED_SETTING == ["one", "two"]
+
+
+async def test_modify_settings_context_manager_in_async_function():
+    with modify_settings(
+        LIST_BASED_SETTING={"append": "three", "prepend": "zero"},
+    ):
+        assert settings.LIST_BASED_SETTING == ["zero", "one", "two", "three"]
+    assert settings.LIST_BASED_SETTING == ["one", "two"]
+
+
 @override_settings(A_SETTING="new value", NEW_SETTING="this wasn't in the file")
 class TestOverridentSettings:
     def test_overriden_settings(self):
