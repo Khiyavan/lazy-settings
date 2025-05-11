@@ -13,4 +13,5 @@ uv.lock
 
 .idea
 
-
+.coverage
+coverage.*

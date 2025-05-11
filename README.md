@@ -1,4 +1,6 @@
 # Lazy Settings
+[![codecov](https://codecov.io/gh/khiyavan/lazy-settings/graph/badge.svg?token=UERDWJ9M31)](https://codecov.io/gh/khiyavan/lazy-settings)
+
 this project is a port of django's settings tool, with a few adjustments to work with any project
 
 
