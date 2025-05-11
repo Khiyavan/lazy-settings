@@ -11,8 +11,19 @@ import os
 from types import ModuleType
 from typing import Any, Self
 
+from lazy_settings.conf.utils import locate_pyproject
 from lazy_settings.exceptions import ImproperlyConfigured
 from lazy_settings.utils.functional import LazyObject, empty
+
+try:
+    import rtoml
+except ImportError:
+    rtoml = None  # type: ignore[assignment]
+    try:
+        import tomli as tomllib
+    except ImportError:
+        import tomllib  # type: ignore[no-redef]
+
 
 ENVIRONMENT_VARIABLE = "SETTINGS_MODULE"
 
@@ -37,13 +48,31 @@ class LazySettings(LazyObject["Settings | UserSettingsHolder"]):
     Django uses the settings module pointed to by DJANGO_SETTINGS_MODULE.
     """
 
+    def _parse_toml(self) -> str | None:
+        if pyproject := locate_pyproject():
+            # rtoml can't use the `b` option if `open()`, and tomllib can handle a Path object,
+            # so we support them like this for now
+            if rtoml:
+                config: dict[str, Any] = rtoml.load(pyproject)
+            else:
+                with pyproject.open("rb") as f:
+                    config = tomllib.load(f)
+
+            settings_module: str | None = config.get("lazy-settings", {}).get(
+                "SETTINGS_MODULE"
+            )
+        return settings_module
+
     def _setup(self, name: str | None = None) -> None:
         """
-        Load the settings module pointed to by the environment variable. This
+        Load the settings module pointed to by the environment variable or pyproject.toml. This
         is used the first time settings are needed, if the user hasn't
         configured settings manually.
         """
         settings_module: str | None = os.environ.get(ENVIRONMENT_VARIABLE)
+        if not settings_module:
+            settings_module = self._parse_toml()
+
         if not settings_module:
             desc = ("setting %s" % name) if name else "settings"
             raise ImproperlyConfigured(
