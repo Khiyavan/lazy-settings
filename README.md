@@ -16,18 +16,35 @@ this project is a port of django's settings tool, with a few adjustments to work
 this project is a port of django's settings, so most things that you can do with django's setting, you can do here, with a few adjustments.
 
 ### for users:
-you need to set the `SETTINGS_MODULE` environment variable which should point to a python module (file)
-all your settings should be defined in this module (or imported in this module)
-
+you need to set `SETTINGS_MODULE`,
 value of `SETTINGS_MODULE` is a dotted path to the file
 so if your file is in `my_project.settings.py`, you should set the env var as `my_project.settings`
+
+there is two way to set this:
+
+1. environment variable which should point to a python module (file)
+all your settings should be defined in this module (or imported in this module)
 
 there area many ways to set an environment variable
 you can export it manually, use a library like `environs`, use a tool like `direnv`
 or set it via python's `os` module
 `os.environ.setdefault("SETTINGS_MODULE", "dir_to_file.settings")`
 
-other than that, you can use the `lazy_settings.conf.settings` object which hold all the settings in your project and packages that use this tool
+
+2. you can use `pyproject.toml` to declare the settings module:
+
+```toml
+[lazy-settings]
+SETTINGS_MODULE = "some_dir.settings"
+```
+if env variable is defined, toml will **not** be read.
+
+you can install `rtoml`(rust) or `tomli`(C) to speed up toml parsing, if none of these are installed, `tomllib` from stdlib will be used.
+if both `rtoml` and `tomli` are installed, `rtoml` will be used.
+
+
+#### settings object
+you can use the `lazy_settings.conf.settings` object which hold all the settings in your project and packages that use this tool
 
 the interface is like this:
 ```python
