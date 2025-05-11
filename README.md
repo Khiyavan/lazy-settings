@@ -4,18 +4,19 @@
 this project is a port of django's settings tool, with a few adjustments to work with any project
 
 
-## Features
+# Features
 * manage user and package settings
 * allow manual configuration
 * can work with multiple projects via registering (experimental)
 * tools for testing
 
 
-## Usage
+# Usage
 
 this project is a port of django's settings, so most things that you can do with django's setting, you can do here, with a few adjustments.
 
-### for users:
+## for users:
+### for a normal use
 you need to set `SETTINGS_MODULE`,
 value of `SETTINGS_MODULE` is a dotted path to the file
 so if your file is in `my_project.settings.py`, you should set the env var as `my_project.settings`
@@ -25,10 +26,13 @@ there is two way to set this:
 1. environment variable which should point to a python module (file)
 all your settings should be defined in this module (or imported in this module)
 
-there area many ways to set an environment variable
+there are many ways to set an environment variable
+
 you can export it manually, use a library like `environs`, use a tool like `direnv`
 or set it via python's `os` module
 `os.environ.setdefault("SETTINGS_MODULE", "dir_to_file.settings")`
+
+just be sure the env variable is set before accessing the settings
 
 
 2. you can use `pyproject.toml` to declare the settings module:
@@ -65,8 +69,12 @@ if getattr(settings, "THAT_SETTINGS"):
     pass
 ```
 
+### for manual use
+to manually configure the settings object, you can look at [django's docs](https://docs.djangoproject.com/en/5.2/topics/settings/#using-settings-without-setting-django-settings-module) since the same logic is used here
 
-### for package developers
+note that the register functionality is available here as well, tho, again, it's experimental.
+
+## for package developers
 put your projects default settings in a file (or a class)
 all settings should be uppercased
 
